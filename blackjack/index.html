@@ -3,499 +3,741 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P Blackjack (21点)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>P2P Blackjack</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         :root {
-            --main-color: #00ff41;
-            --bg-color: #0d1117;
-            --loss-color: #ff3333;
-            --card-bg: #161b22;
+            --felt-bg: radial-gradient(circle at center, #35654d 0%, #1e3b2e 100%);
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --gold: #f2c94c;
+            --white: #ffffff;
+            --red: #eb5757;
+            --blue: #2f80ed;
         }
 
         body {
-            font-family: 'Courier New', Courier, monospace;
-            background: var(--bg-color);
-            color: var(--main-color);
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            background: var(--felt-bg);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- 连接遮罩层 --- */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s;
+        }
+
+        .login-box {
+            background: #222;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid #444;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #111;
+            color: white;
+            box-sizing: border-box;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* --- 游戏主界面 --- */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+        }
+
+        .money-badge {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+        }
+
+        .money-badge span {
+            color: var(--gold);
+        }
+
+        .game-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* 垂直居中 */
+            position: relative;
+        }
+
+        .hand-area {
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .hand-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+            margin-bottom: 5px;
+        }
+
+        .cards-row {
+            display: flex;
+            justify-content: center;
+            height: 100px;
+            position: relative;
+            min-width: 100px;
+        }
+
+        /* --- 卡牌样式 --- */
+        .card {
+            width: 70px;
+            height: 100px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 5px;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 18px;
+            margin-left: -30px;
+            /* 叠牌效果 */
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
             user-select: none;
         }
 
-        /* UI 组件 */
-        .panel {
-            border: 1px solid #30363d;
+        .card:first-child {
+            margin-left: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            z-index: 10;
+        }
+
+        .card.red {
+            color: #d00;
+        }
+
+        .card.black {
+            color: #111;
+        }
+
+        .card-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            opacity: 0.2;
+        }
+
+        .card.back {
+            background: #2c3e50;
+            background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 2px, transparent 2px, transparent 4px);
+            border: 2px solid white;
+        }
+
+        .card.back * {
+            display: none;
+        }
+
+        /* --- 底部控制栏 --- */
+        .control-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
             padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            background: #010409;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 通用按钮 */
+        .btn {
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+            text-transform: uppercase;
+            margin: 5px;
+            color: white;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+            color: #333;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        /* 下注滑块 */
+        .bet-slider-container {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 10px;
+        }
+
+        input[type=range] {
+            width: 100%;
+        }
+
+        /* 状态文字 */
+        #status-text {
+            font-size: 18px;
+            color: #ccc;
+            margin-bottom: 10px;
+            min-height: 24px;
+        }
+
+        .pot-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 0;
         }
 
         .hidden {
             display: none !important;
-        }
-
-        button {
-            background: #238636;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-family: inherit;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            margin: 5px;
-        }
-
-        button:disabled {
-            background: #30363d;
-            cursor: not-allowed;
-            color: #8b949e;
-        }
-
-        button.action-btn {
-            width: 45%;
-            font-size: 18px;
-        }
-
-        button.stop-btn {
-            background: #da3633;
-        }
-
-        input {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            color: white;
-            padding: 8px;
-        }
-
-        /* 游戏区域 */
-        .game-board {
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-        }
-
-        .player-zone {
-            width: 48%;
-            border: 1px dashed #30363d;
-            padding: 10px;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* 卡牌样式 */
-        .cards-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .card {
-            width: 50px;
-            height: 70px;
-            background: white;
-            color: black;
-            border-radius: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 20px;
-            position: relative;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .card.red {
-            color: red;
-        }
-
-        .card.hidden-card {
-            background: #2188ff;
-            color: transparent;
-            background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, #1f6feb 5px, #1f6feb 10px);
-        }
-
-        /* 积分板 */
-        .scoreboard {
-            display: flex;
-            justify-content: space-between;
-            font-size: 24px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 10px;
-        }
-
-        .money {
-            color: gold;
-        }
-
-        /* 状态条 */
-        #game-status {
-            text-align: center;
-            font-size: 18px;
-            margin: 10px 0;
-            color: #58a6ff;
-            min-height: 24px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="scoreboard">
-        <div>我: $<span id="my-money" class="money">1000</span></div>
-        <div>底池: $<span id="pot" style="color:white">0</span></div>
-        <div>对手: $<span id="opp-money" class="money">1000</span></div>
-    </div>
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2 style="color:white; margin-top:0;">♠ BLACKJACK 21点</h2>
+            <div style="margin-bottom:20px; color:#888; font-size:12px;">SERVERLESS & SECURE</div>
 
-    <div id="conn-panel" class="panel">
-        <h3>1. 建立连接</h3>
-        <p>我的 ID: <span id="my-id" style="color:white; user-select: text;">正在获取...</span> <button onclick="copyId()"
-                style="padding: 2px 10px; font-size: 12px;">复制</button></p>
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="opp-id" placeholder="粘贴对手 ID" style="flex-grow: 1;">
-            <button onclick="connect()">连接</button>
+            <p style="text-align:left; color:#ccc; margin-bottom:5px;">你的 ID:</p>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="my-id" readonly value="正在获取..."
+                    style="background:#333; color:#0f0; font-family:monospace;">
+                <button class="btn btn-primary" onclick="copyId()" style="padding:0 15px; margin:10px 0;">复制</button>
+            </div>
+
+            <div style="width:100%; height:1px; background:#444; margin:20px 0;"></div>
+
+            <p style="text-align:left; color:#ccc; margin-bottom:5px;">连接对手:</p>
+            <input type="text" id="target-id" placeholder="粘贴对手的 ID">
+            <button class="btn btn-gold" onclick="connect()" style="width:100%; margin:10px 0;">开始连接</button>
         </div>
     </div>
 
-    <div id="game-panel" class="panel hidden">
-        <div id="game-status">等待开始...</div>
+    <div class="top-bar">
+        <div class="money-badge">我: $<span id="my-money">1000</span></div>
+        <div class="money-badge">对手: $<span id="opp-money">1000</span></div>
+    </div>
 
-        <div class="game-board">
-            <div class="player-zone" style="border-color: var(--main-color);">
-                <h3>我 (<span id="my-points">0</span>点)</h3>
-                <div id="my-cards" class="cards-container"></div>
-                <div id="my-controls" class="hidden">
-                    <button class="action-btn" onclick="hit()">要牌 (Hit)</button>
-                    <button class="action-btn stop-btn" onclick="stand()">停牌 (Stand)</button>
-                </div>
-            </div>
+    <div class="game-area">
+        <div class="pot-display" id="pot-badge">POT: $0</div>
 
-            <div class="player-zone" style="border-color: #ff7b72;">
-                <h3>对手</h3>
-                <div id="opp-cards" class="cards-container"></div>
-                <div id="opp-action-status" style="margin-top: auto; color: #8b949e;">等待中...</div>
-            </div>
+        <div class="hand-area">
+            <div class="hand-label">OPPONENT</div>
+            <div id="opp-cards" class="cards-row"></div>
         </div>
 
-        <div style="text-align: center; margin-top: 20px;">
-            <button id="start-btn" onclick="startGameRequest()" class="hidden"
-                style="width: 100%; background: #1f6feb;">开始下一局 (下注 $100)</button>
+        <div class="hand-area">
+            <div id="my-cards" class="cards-row"></div>
+            <div class="hand-label" style="margin-top:10px;">YOU (<span id="my-points">0</span>)</div>
+        </div>
+    </div>
+
+    <div class="control-panel">
+        <div id="status-text">等待连接...</div>
+
+        <div id="bet-controls" class="hidden bet-slider-container">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>下注额: $<span id="bet-val-display" style="color:var(--gold)">100</span></span>
+                <span style="font-size:12px; opacity:0.6">Max: <span id="max-bet">1000</span></span>
+            </div>
+            <input type="range" id="bet-slider" min="50" max="1000" step="50" value="100" oninput="updateBetDisplay()">
+            <button class="btn btn-gold" onclick="sendStartRequest()"
+                style="width:100%; margin-top:10px;">下注并开始</button>
+        </div>
+
+        <div id="guest-wait-msg" class="hidden">
+            <div style="opacity:0.6; font-size:14px;">等待房主下注...</div>
+        </div>
+
+        <div id="game-controls" class="hidden">
+            <button class="btn btn-success" onclick="hit()">要牌 (Hit)</button>
+            <button class="btn btn-danger" onclick="stand()">停牌 (Stand)</button>
+        </div>
+
+        <div id="restart-area" class="hidden">
         </div>
     </div>
 
     <script>
-        // --- 游戏配置 ---
+        // --- 核心变量 ---
         const INITIAL_MONEY = 1000;
-        const BET_AMOUNT = 100;
-
-        // --- 状态变量 ---
         let myMoney = INITIAL_MONEY;
         let oppMoney = INITIAL_MONEY;
-        let myHand = [];
-        let oppHandVisible = []; // 只存对方亮出的牌，或者背面
-        let isMyTurn = false;
-        let conn = null;
-        let iAmHost = false; // 发起连接的一方即为主机，负责先手
+        let currentBet = 0;
 
-        // PeerJS 初始化
+        let myHand = [];
+        let currentDeck = []; // 新增：当前的公共牌堆
+        let isMyTurn = false;
+        let iAmHost = false;
+        let conn = null;
+
+        const SUITS = ['♠', '♥', '♣', '♦'];
+        const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+        // --- PeerJS 初始化 ---
         const peer = new Peer();
 
         peer.on('open', id => {
-            document.getElementById('my-id').innerText = id;
+            document.getElementById('my-id').value = id;
         });
 
         peer.on('connection', c => {
             conn = c;
-            setupConnection(false); // 被动连接，我是客机
+            setupConnection(false);
         });
 
         function connect() {
-            const id = document.getElementById('opp-id').value;
+            const id = document.getElementById('target-id').value.trim();
             if (!id) return alert("请输入ID");
             conn = peer.connect(id);
-            setupConnection(true); // 主动连接，我是主机
+            setupConnection(true);
         }
 
         function setupConnection(isHost) {
             iAmHost = isHost;
             conn.on('open', () => {
-                document.getElementById('conn-panel').classList.add('hidden');
-                document.getElementById('game-panel').classList.remove('hidden');
-                document.getElementById('start-btn').classList.remove('hidden');
-                updateStatus(isHost ? "连接成功！请点击开始下一局" : "连接成功！等待房主开始...");
-                // 如果是客机，隐藏开始按钮，等待主机发起
-                if (!isHost) document.getElementById('start-btn').classList.add('hidden');
+                document.getElementById('login-overlay').style.opacity = 0;
+                setTimeout(() => document.getElementById('login-overlay').style.display = 'none', 500);
+
+                resetRoundUI();
+
+                if (isHost) {
+                    showBettingUI();
+                    setStatus("连接成功！请设置赌注。");
+                } else {
+                    document.getElementById('guest-wait-msg').classList.remove('hidden');
+                    setStatus("连接成功！等待房主开局...");
+                }
             });
+
             conn.on('data', handleData);
-            conn.on('close', () => alert("对方已断开连接"));
+            conn.on('close', () => alert("连接断开"));
         }
 
-        function send(type, data) {
-            if (conn && conn.open) conn.send({ type, data });
-        }
-
-        // --- 核心消息处理 ---
+        // --- 消息处理 ---
         function handleData(msg) {
-            console.log("收到:", msg);
+            // console.log("Recv:", msg); // 调试用
             switch (msg.type) {
-                case 'START_REQ': // 对手请求开始
-                    startRound();
+                case 'START_REQ':
+                    // 客机收到了房主洗好的牌 (msg.deck)
+                    startRound(msg.bet, msg.deck);
                     break;
-                case 'OPP_HIT': // 对手要了一张牌
-                    renderOpponentCard(true); // 渲染一张背面牌
-                    document.getElementById('opp-action-status').innerText = "对手拿了一张牌...";
+                case 'OPP_HIT':
+                    // 对手抽牌：因为牌堆是同步的，我们这边也要移除一张牌，保持同步
+                    currentDeck.pop();
+                    renderOppCard(true);
+                    setStatus("对手要了一张牌...");
                     break;
-                case 'OPP_STAND': // 对手停牌
-                    document.getElementById('opp-action-status').innerText = "对手停牌了！";
-                    if (!isMyTurn && !amIFinished()) {
-                        // 如果我也没操作权了（说明我也停了），那就结算。否则轮到我
-                        // 这里简化逻辑：Host先玩，玩完发TURN_PASS给Guest。
-                        // 如果是Guest收到STAND，说明Host玩完了，轮到Guest。
-                        // 如果是Host收到STAND，说明Guest玩完了，进入结算。
-                    }
+                case 'OPP_STAND':
+                    setStatus("对手停牌。");
                     break;
-                case 'TURN_PASS': // 对手回合结束，轮到我
+                case 'TURN_PASS':
                     isMyTurn = true;
-                    updateControls();
-                    updateStatus("轮到你了！");
+                    toggleGameControls(true);
+                    setStatus("轮到你了！请操作。");
                     break;
-                case 'GAME_OVER_SYNC': // 结算：对手发来了他的真实手牌
-                    resolveGame(msg.data); // data 是对手的手牌数组
+                case 'GAME_OVER_SYNC':
+                    resolveGame(msg.hand);
+                    break;
+                case 'SYNC_MONEY':
+                    oppMoney = msg.money;
+                    document.getElementById('opp-money').innerText = oppMoney;
                     break;
             }
         }
 
-        // --- 游戏逻辑 ---
+        // --- 牌堆逻辑 (新加部分) ---
 
-        function startGameRequest() {
-            if (myMoney < BET_AMOUNT || oppMoney < BET_AMOUNT) return alert("有人破产了，游戏结束");
-            // 本地开始
-            startRound();
-            // 通知对方开始
-            send('START_REQ');
-        }
-
-        function startRound() {
-            // 重置 UI 和 数据
-            myHand = [];
-            oppHandVisible = []; // 重置视觉
-            document.getElementById('my-cards').innerHTML = '';
-            document.getElementById('opp-cards').innerHTML = '';
-            document.getElementById('opp-action-status').innerText = '';
-            document.getElementById('start-btn').classList.add('hidden');
-            document.getElementById('pot').innerText = BET_AMOUNT * 2;
-
-            // 扣钱
-            myMoney -= BET_AMOUNT;
-            oppMoney -= BET_AMOUNT;
-            updateScoreboard();
-
-            // 初始发牌：每人2张
-            // 逻辑：每个人自己发自己的两张牌，只告诉对方“我有两张牌”
-            drawCard(false);
-            drawCard(false);
-            // 模拟对手发了两张（背面）
-            renderOpponentCard(true);
-            renderOpponentCard(true);
-
-            // 判定先后手
-            if (iAmHost) {
-                isMyTurn = true;
-                updateStatus("你的回合：请操作");
-            } else {
-                isMyTurn = false;
-                updateStatus("等待对手操作...");
-            }
-            updateControls();
-        }
-
-        // 抽牌逻辑
-        // 为了简化，使用纯随机模拟无限牌堆
-        const SUITS = ['♠', '♥', '♣', '♦'];
-        const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-
-        function getRandomCard() {
-            const s = SUITS[Math.floor(Math.random() * SUITS.length)];
-            const r = RANKS[Math.floor(Math.random() * RANKS.length)];
-            let v = parseInt(r);
-            if (r === 'A') v = 11;
-            if (['J', 'Q', 'K'].includes(r)) v = 10;
-            return { suit: s, rank: r, value: v, isRed: (s === '♥' || s === '♦') };
-        }
-
-        function drawCard(isHitAction = true) {
-            const card = getRandomCard();
-            myHand.push(card);
-            renderMyCard(card);
-            updatePoints();
-
-            if (isHitAction) {
-                send('OPP_HIT'); // 告诉对手我拿了一张牌（但不说是啥）
-                if (calcPoints(myHand) > 21) {
-                    // 爆牌自动停
-                    stand();
+        // 生成一副崭新的 52 张牌
+        function createDeck() {
+            let deck = [];
+            for (let s of SUITS) {
+                for (let r of RANKS) {
+                    let v = parseInt(r);
+                    if (r === 'A') v = 11;
+                    if (['J', 'Q', 'K'].includes(r)) v = 10;
+                    deck.push({ s, r, v, isRed: (s === '♥' || s === '♦') });
                 }
             }
+            return deck;
         }
 
-        // 玩家操作：要牌
+        // 洗牌算法 (Fisher-Yates Shuffle)
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- 游戏流程 ---
+
+        function showBettingUI() {
+            if (!iAmHost) return;
+            const max = Math.min(myMoney, oppMoney);
+            const slider = document.getElementById('bet-slider');
+            slider.max = max;
+            slider.value = Math.min(100, max);
+            updateBetDisplay();
+
+            document.getElementById('bet-controls').classList.remove('hidden');
+            document.getElementById('game-controls').classList.add('hidden');
+            document.getElementById('restart-area').classList.add('hidden');
+        }
+
+        function updateBetDisplay() {
+            const val = document.getElementById('bet-slider').value;
+            document.getElementById('bet-val-display').innerText = val;
+            document.getElementById('max-bet').innerText = Math.min(myMoney, oppMoney);
+        }
+
+        function sendStartRequest() {
+            const amount = parseInt(document.getElementById('bet-slider').value);
+            if (amount > myMoney || amount > oppMoney) return alert("余额不足！");
+
+            // 关键改动：房主负责创建并洗好一副牌
+            const newDeck = shuffle(createDeck());
+
+            // 将洗好的牌发给对手
+            send({ type: 'START_REQ', bet: amount, deck: newDeck });
+
+            // 自己也用这副牌开始
+            startRound(amount, newDeck);
+        }
+
+        // 2. 回合开始 (接收同步的牌堆)
+        function startRound(bet, syncedDeck) {
+            currentBet = bet;
+            currentDeck = syncedDeck; // 保存这局的牌堆
+
+            myMoney -= bet;
+            oppMoney -= bet;
+
+            updateMoneyUI();
+            document.getElementById('pot-badge').innerText = `POT: $${bet * 2}`;
+            document.getElementById('bet-controls').classList.add('hidden');
+            document.getElementById('guest-wait-msg').classList.add('hidden');
+            document.getElementById('restart-area').classList.add('hidden');
+
+            myHand = [];
+            document.getElementById('my-cards').innerHTML = '';
+            document.getElementById('opp-cards').innerHTML = '';
+
+            // 初始发牌
+            // 注意：这里需要严格保证发牌顺序。
+            // 假设顺序是：房主1 -> 客机1 -> 房主2 -> 客机2 (标准发牌)
+            // 或者简化为：我自己拿两张，对手拿两张。
+            // 为了P2P简单化：每个人都在本地从 currentDeck.pop() 两张给自己。
+            // 但问题是：如果我不告诉对手我拿了哪两张，对手那边的 currentDeck 怎么扣除？
+            // 修正逻辑：
+            // 既然 deck 是同步的，我们规定：牌堆顶端的 4 张牌是初始牌。
+            // 0, 2 给房主; 1, 3 给客机。
+
+            if (iAmHost) {
+                // 房主拿第1、3张 (索引 51, 49 - 因为pop是取尾部)
+                // 简单处理：大家轮流 pop
+                // 房主先拿
+                const c1 = currentDeck.pop();
+                myHand.push(c1); renderMyCard(c1);
+
+                // 模拟客机拿一张 (直接扔掉，保持同步)
+                currentDeck.pop();
+                renderOppCard(true);
+
+                // 房主再拿
+                const c2 = currentDeck.pop();
+                myHand.push(c2); renderMyCard(c2);
+
+                // 模拟客机再拿
+                currentDeck.pop();
+                renderOppCard(true);
+
+            } else {
+                // 客机逻辑
+                // 模拟房主拿一张
+                currentDeck.pop();
+                renderOppCard(true);
+
+                // 客机拿一张
+                const c1 = currentDeck.pop();
+                myHand.push(c1); renderMyCard(c1);
+
+                // 模拟房主拿一张
+                currentDeck.pop();
+                renderOppCard(true);
+
+                // 客机再拿
+                const c2 = currentDeck.pop();
+                myHand.push(c2); renderMyCard(c2);
+            }
+
+            updatePointsUI();
+
+            if (iAmHost) {
+                isMyTurn = true;
+                toggleGameControls(true);
+                setStatus("你的回合");
+            } else {
+                isMyTurn = false;
+                toggleGameControls(false);
+                setStatus("等待对手操作...");
+            }
+        }
+
+        // 3. 抽牌操作
+        // 这里的逻辑变成了从公共牌堆取牌
         function hit() {
-            drawCard(true);
+            if (currentDeck.length === 0) return alert("没牌了！(极其罕见)");
+
+            const card = currentDeck.pop(); // 从数组末尾拿一张
+            myHand.push(card);
+            renderMyCard(card);
+            updatePointsUI();
+
+            send({ type: 'OPP_HIT' }); // 告诉对手我拿了一张，他也需要 pop 一次
+
+            if (calcPoints(myHand) > 21) {
+                stand();
+            }
         }
 
-        // 玩家操作：停牌
         function stand() {
             isMyTurn = false;
-            updateControls();
-            send('OPP_STAND');
+            toggleGameControls(false);
+            send({ type: 'OPP_STAND' }); // 注意：Stand 不需要 pop 牌
 
             if (iAmHost) {
-                // 如果我是主机，我停牌后，轮到客机
-                send('TURN_PASS');
-                updateStatus("已停牌，等待对手操作...");
+                send({ type: 'TURN_PASS' });
+                setStatus("已停牌，等待对手...");
             } else {
-                // 如果我是客机，我停牌后，双方都结束了，直接发起结算
-                // 发送我的真实手牌给对方，对方计算胜负
-                send('GAME_OVER_SYNC', myHand);
-                // 本地也进入等待结算状态（实际上马上就会收到对方的结算，这里可以先处理UI）
-                updateStatus("结算中...");
+                send({ type: 'GAME_OVER_SYNC', hand: myHand });
+                setStatus("结算中...");
             }
         }
 
-        // 结算逻辑（核心）
-        // 只有当作为 Host 收到 Guest 的 GAME_OVER_SYNC 时，或者作为 Guest 收到 Host 的 GAME_OVER_SYNC 时触发
-        // 为了简化，我们统一逻辑：
-        // 客机停牌后，把手牌发给主机。主机（Host）收到客机手牌后，也把自己的手牌发给客机。
-        // 双方此时都拥有了双方的真实手牌，各自在本地计算胜负（理论上结果是一样的）。
-
-        function resolveGame(opponentsRealHand) {
-            // 1. 如果我是主机，我收到了客机的牌，我现在要把我的牌发给他
-            if (iAmHost) {
-                send('GAME_OVER_SYNC', myHand);
-            }
-
-            // 2. 渲染对手的真实手牌
+        // 4. 结算 (不变)
+        function resolveGame(oppHand) {
             const oppDiv = document.getElementById('opp-cards');
-            oppDiv.innerHTML = ''; // 清空背面牌
-            opponentsRealHand.forEach(c => {
-                const el = document.createElement('div');
-                el.className = `card ${c.isRed ? 'red' : ''}`;
-                el.innerText = c.suit + c.rank;
+            oppDiv.innerHTML = '';
+            oppHand.forEach(c => {
+                const el = createCardEl(c);
                 oppDiv.appendChild(el);
             });
 
-            // 3. 计算胜负
+            if (iAmHost) send({ type: 'GAME_OVER_SYNC', hand: myHand });
+
             const myScore = calcPoints(myHand);
-            const oppScore = calcPoints(opponentsRealHand);
-
-            let result = "";
-
-            // 胜负判定规则
+            const oppScore = calcPoints(oppHand);
             const myBust = myScore > 21;
             const oppBust = oppScore > 21;
 
-            if (myBust && oppBust) {
-                result = "双爆！平局";
-                myMoney += BET_AMOUNT;
-                oppMoney += BET_AMOUNT;
-            } else if (myBust) {
-                result = "你爆了！对手获胜";
-                oppMoney += BET_AMOUNT * 2;
-            } else if (oppBust) {
-                result = "对手爆了！你获胜";
-                myMoney += BET_AMOUNT * 2;
-            } else {
-                // 谁都没爆
-                if (myScore > oppScore) {
-                    result = "你赢了！";
-                    myMoney += BET_AMOUNT * 2;
-                } else if (myScore < oppScore) {
-                    result = "你输了...";
-                    oppMoney += BET_AMOUNT * 2;
-                } else {
-                    result = "点数相同，平局";
-                    myMoney += BET_AMOUNT;
-                    oppMoney += BET_AMOUNT;
-                }
+            let win = false;
+            let draw = false;
+
+            if (myBust && oppBust) { draw = true; }
+            else if (myBust) { win = false; }
+            else if (oppBust) { win = true; }
+            else {
+                if (myScore > oppScore) win = true;
+                else if (myScore < oppScore) win = false;
+                else draw = true;
             }
 
-            updateStatus(`结果：${result} (我: ${myScore} vs 对手: ${oppScore})`);
-            updateScoreboard();
+            let resultText = "";
+            if (draw) {
+                myMoney += currentBet;
+                oppMoney += currentBet;
+                resultText = "平局 (PUSH)";
+            } else if (win) {
+                myMoney += currentBet * 2;
+                resultText = "你赢了! (WIN)";
+                triggerWinEffect();
+            } else {
+                oppMoney += currentBet * 2;
+                resultText = "你输了... (LOSE)";
+            }
 
-            // 允许开始下一局
+            setStatus(`${resultText} [${myScore} vs ${oppScore}]`);
+            updateMoneyUI();
+
             if (iAmHost) {
-                document.getElementById('start-btn').classList.remove('hidden');
-            }
-        }
-
-        // --- 辅助函数 ---
-
-        function calcPoints(hand) {
-            let sum = 0;
-            let aces = 0;
-            for (let c of hand) {
-                sum += c.value;
-                if (c.rank === 'A') aces++;
-            }
-            // A 的特殊处理：尽量算成11，如果爆了就减10
-            while (sum > 21 && aces > 0) {
-                sum -= 10;
-                aces--;
-            }
-            return sum;
-        }
-
-        function updatePoints() {
-            const p = calcPoints(myHand);
-            document.getElementById('my-points').innerText = p + (p > 21 ? " (爆牌!)" : "");
-        }
-
-        function updateControls() {
-            const div = document.getElementById('my-controls');
-            if (isMyTurn && calcPoints(myHand) <= 21) {
-                div.classList.remove('hidden');
+                setTimeout(showBettingUI, 2000);
             } else {
-                div.classList.add('hidden');
+                document.getElementById('guest-wait-msg').classList.remove('hidden');
             }
+            send({ type: 'SYNC_MONEY', money: myMoney });
+        }
+
+        // --- 辅助 UI 函数 (保持不变) ---
+        function createCardEl(card) {
+            const el = document.createElement('div');
+            el.className = `card ${card.isRed ? 'red' : 'black'}`;
+            const top = document.createElement('div'); top.innerText = card.r;
+            const center = document.createElement('div'); center.className = 'card-center'; center.innerText = card.s;
+            const bottom = document.createElement('div'); bottom.style.transform = "rotate(180deg)"; bottom.innerText = card.r;
+            el.appendChild(top); el.appendChild(center); el.appendChild(bottom);
+            return el;
         }
 
         function renderMyCard(card) {
             const div = document.getElementById('my-cards');
-            const el = document.createElement('div');
-            el.className = `card ${card.isRed ? 'red' : ''}`;
-            el.innerText = card.suit + card.rank;
-            div.appendChild(el);
+            div.appendChild(createCardEl(card));
         }
 
-        function renderOpponentCard(isHidden) {
+        function renderOppCard(isBack) {
             const div = document.getElementById('opp-cards');
             const el = document.createElement('div');
-            el.className = `card ${isHidden ? 'hidden-card' : ''}`;
-            el.innerText = isHidden ? "?" : "";
+            el.className = 'card back';
             div.appendChild(el);
         }
 
-        function updateScoreboard() {
+        function toggleGameControls(show) {
+            const el = document.getElementById('game-controls');
+            if (show && calcPoints(myHand) <= 21) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+        }
+
+        function updatePointsUI() {
+            const p = calcPoints(myHand);
+            document.getElementById('my-points').innerText = p + (p > 21 ? " 爆牌" : "");
+        }
+
+        function updateMoneyUI() {
             document.getElementById('my-money').innerText = myMoney;
             document.getElementById('opp-money').innerText = oppMoney;
-            if (myMoney <= 0) alert("你破产了！游戏结束！");
         }
 
-        function updateStatus(str) {
-            document.getElementById('game-status').innerText = str;
+        function setStatus(msg) {
+            document.getElementById('status-text').innerText = msg;
         }
 
+        function triggerWinEffect() {
+            document.getElementById('pot-badge').style.transform = "translate(-50%, -50%) scale(1.5)";
+            document.getElementById('pot-badge').style.color = "#fff";
+            setTimeout(() => {
+                document.getElementById('pot-badge').style.transform = "translate(-50%, -50%) scale(1)";
+                document.getElementById('pot-badge').style.color = "var(--gold)";
+            }, 500);
+        }
+
+        function calcPoints(hand) {
+            let sum = 0, aces = 0;
+            hand.forEach(c => {
+                sum += c.v;
+                if (c.r === 'A') aces++;
+            });
+            while (sum > 21 && aces > 0) { sum -= 10; aces--; }
+            return sum;
+        }
+
+        function send(data) { if (conn && conn.open) conn.send(data); }
         function copyId() {
-            navigator.clipboard.writeText(document.getElementById('my-id').innerText);
+            const el = document.getElementById('my-id');
+            el.select();
+            document.execCommand('copy');
+            alert("ID已复制");
         }
+
+        function resetRoundUI() {
+            document.getElementById('my-cards').innerHTML = '';
+            document.getElementById('opp-cards').innerHTML = '';
+            document.getElementById('my-points').innerText = '0';
+            document.getElementById('pot-badge').innerText = 'POT: $0';
+        }
+
     </script>
 </body>
 
