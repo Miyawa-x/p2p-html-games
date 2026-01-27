@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Big Q-Gomoku | 噗呦五子棋</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="setup-layer">
+        <div class="card">
+            <h1>技能五子棋 <span style="font-size:12px; color:#aaa">Pro</span></h1>
+            <div class="input-group">
+                <input type="text" id="my-id" readonly value="正在获取ID..." onclick="this.select()">
+                <button class="btn btn-blue" onclick="copyId()">复制我的 ID</button>
+            </div>
+            <div class="divider"></div>
+            <div class="input-group">
+                <input type="text" id="target-id" placeholder="粘贴好友 ID">
+                <button class="btn btn-green" onclick="connect()">开始连接</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-layer">
+        <div class="status-pill">
+            <div id="turn-indicator"></div>
+            <span id="status-text">等待连接...</span>
+        </div>
+
+        <div class="board-wrapper">
+            <div id="board" class="board">
+            </div>
+        </div>
+    </div>
+
+    <div id="result-modal">
+        <div id="result-title">WIN!</div>
+        <p id="result-desc">太厉害了！</p>
+        <button class="btn btn-green" onclick="requestRestart()">再来一局</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+
+</html>
