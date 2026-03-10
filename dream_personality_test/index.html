@@ -715,134 +715,264 @@
     </section>
 
     <script>
+        // ─────────────────────────────────────────
+        //  QUESTIONS  (enriched scene descriptions)
+        // ─────────────────────────────────────────
         const questions = [
             {
-                q: "梦里你走进一片陌生森林，你首先会：", opts: [
-                    { t: "找一条清晰的小路走", d: "C" }, { t: "停下来观察环境", d: "E" },
-                    { t: "直接往深处走", d: "X" }, { t: "注意森林里奇怪的细节", d: "S" }]
+                scene: "第一幕 · 森林入口",
+                q: "夜里你走进一片陌生的森林。树木高耸，枝叶相互交叠，远处隐约传来流水声。你站在林缘，四周安静得只剩呼吸声。",
+                opts: [
+                    { t: "沿着脚下唯一一条可见的小径走下去", d: "C" },
+                    { t: "先站着感受一下，感知这里的气息", d: "E" },
+                    { t: "不管路不路，直接往深处走进去", d: "X" },
+                    { t: "注意到树干上有奇怪的纹路，停下来观察", d: "S" }]
             },
+
             {
-                q: "梦中天空突然变成紫色，你的反应是：", opts: [
-                    { t: "试图寻找原因", d: "C" }, { t: "感到一种奇怪的情绪", d: "E" },
-                    { t: "想知道天空背后有什么", d: "X" }, { t: "觉得这可能象征什么", d: "S" }]
+                scene: "第二幕 · 变色天空",
+                q: "你抬起头，发现天空正在缓缓变成深紫色，没有任何预兆。云层像被染过一样，光线也变得奇异起来。",
+                opts: [
+                    { t: "试图推断是什么原因造成的", d: "C" },
+                    { t: "胸口涌起一种说不清楚的情绪", d: "E" },
+                    { t: "想知道天空的另一边究竟是什么", d: "X" },
+                    { t: "直觉上觉得这颜色在提示某件事", d: "S" }]
             },
+
             {
-                q: "你梦见一扇锁着的门：", opts: [
-                    { t: "想办法打开它", d: "C" }, { t: "感觉门后可能有故事", d: "E" },
-                    { t: "很想进去看看", d: "X" }, { t: "门的形状让你产生联想", d: "S" }]
+                scene: "第三幕 · 锁着的门",
+                q: "走廊尽头有一扇门，门缝透出微弱的光。你上前，发现门把手是锁住的，门上刻着一个你认不出的符号。",
+                opts: [
+                    { t: "检查门锁，想办法把它打开", d: "C" },
+                    { t: "把耳朵贴上去，感受门后的动静", d: "E" },
+                    { t: "找遍周围看有没有钥匙或别的入口", d: "X" },
+                    { t: "盯着那个符号，感觉它在表达什么", d: "S" }]
             },
+
             {
-                q: "梦里你在一座城市迷路：", opts: [
-                    { t: "找地图", d: "C" }, { t: "感受城市的氛围", d: "E" },
-                    { t: "随便走走看看", d: "X" }, { t: "注意城市的奇怪结构", d: "S" }]
+                scene: "第四幕 · 陌生城市",
+                q: "你站在一个完全陌生的城市街道上。建筑风格混乱，有些街道在半空交叉，行人都低着头走路，没有人对视。",
+                opts: [
+                    { t: "寻找路牌或地图，确认方位", d: "C" },
+                    { t: "感受这座城市奇异的氛围", d: "E" },
+                    { t: "随意选一个方向走，看看能到哪里", d: "X" },
+                    { t: "注意到建筑物之间的排列有某种规律", d: "S" }]
             },
+
             {
-                q: "梦里你遇见一个陌生人：", opts: [
-                    { t: "问他这里是哪里", d: "C" }, { t: "注意他的表情", d: "E" },
-                    { t: "想知道他来自哪里", d: "X" }, { t: "觉得他像某种象征", d: "S" }]
+                scene: "第五幕 · 陌生人",
+                q: "雾中走来一个人，穿着你似乎在某处见过的衣服。他停在你面前，没有开口，只是看着你。",
+                opts: [
+                    { t: "直接问他这是哪里、他是谁", d: "C" },
+                    { t: "观察他眼神里的情绪", d: "E" },
+                    { t: "问他前面的路通向哪里", d: "X" },
+                    { t: "感觉他不像普通人，像某种象征", d: "S" }]
             },
+
             {
-                q: "梦里你在海边：", opts: [
-                    { t: "观察潮汐规律", d: "C" }, { t: "感受海风情绪", d: "E" },
-                    { t: "想游向远处", d: "X" }, { t: "海浪让你产生联想", d: "S" }]
+                scene: "第六幕 · 夜晚海边",
+                q: "你一个人坐在海边。浪声很轻，星星的倒影在水面摇晃，远处有一艘灯火模糊的船缓缓移动。",
+                opts: [
+                    { t: "观察潮汐的节奏和规律", d: "C" },
+                    { t: "让浪声和空气把情绪带走", d: "E" },
+                    { t: "想游向那艘船，看看上面有什么", d: "X" },
+                    { t: "觉得这片海正在讲一个关于时间的故事", d: "S" }]
             },
+
             {
-                q: "梦中出现一只白鹿：", opts: [
-                    { t: "尝试靠近它", d: "C" }, { t: "感到神秘", d: "E" },
-                    { t: "跟随它", d: "X" }, { t: "觉得它像某种寓意", d: "S" }]
+                scene: "第七幕 · 白鹿",
+                q: "树林深处，一只纯白的鹿静静地站在那里。它没有逃跑，只是平静地看着你，鼻息在空气中化成白雾。",
+                opts: [
+                    { t: "慢慢靠近，尝试触碰它", d: "C" },
+                    { t: "感受到一种莫名的神圣感", d: "E" },
+                    { t: "跟上它，看它要去哪里", d: "X" },
+                    { t: "觉得它出现在这里不是偶然", d: "S" }]
             },
+
             {
-                q: "梦里时间突然停止：", opts: [
-                    { t: "想找出原因", d: "C" }, { t: "感到紧张", d: "E" },
-                    { t: "想利用时间探索周围", d: "X" }, { t: "觉得时间停止有象征意义", d: "S" }]
+                scene: "第八幕 · 时间停止",
+                q: "空气突然凝固。树叶停在半空，飞鸟悬在天上，一滴水珠静止在落地前。只有你还能动。",
+                opts: [
+                    { t: "推断是什么导致了时间停止", d: "C" },
+                    { t: "感到一种奇异的孤独感", d: "E" },
+                    { t: "趁现在去探索平时无法进入的地方", d: "X" },
+                    { t: "觉得时间停止这件事本身在暗示你什么", d: "S" }]
             },
+
             {
-                q: "梦里房间不断变化形状：", opts: [
-                    { t: "尝试理解它的结构", d: "C" }, { t: "感觉不安", d: "E" },
-                    { t: "想继续探索", d: "X" }, { t: "觉得像某种心理空间", d: "S" }]
+                scene: "第九幕 · 变形的房间",
+                q: "你站在一个房间里，但它的形状一直在变——墙壁往外扩张，天花板升高，地板倾斜，窗的位置不断移动。",
+                opts: [
+                    { t: "试图记录变化的规律", d: "C" },
+                    { t: "感到某种难以名状的不安", d: "E" },
+                    { t: "继续往里走，想看到它变成什么", d: "X" },
+                    { t: "觉得这个房间是你某部分心理的投射", d: "S" }]
             },
+
             {
-                q: "梦中你发现一面镜子：", opts: [
-                    { t: "看看镜中的自己", d: "C" }, { t: "感觉有点奇怪", d: "E" },
-                    { t: "想穿过镜子", d: "X" }, { t: "镜子让你想到潜意识", d: "S" }]
+                scene: "第十幕 · 镜子",
+                q: "走廊里有一面落地镜，镜子里的你比真实的你慢了半秒。你靠近时，镜中的你却先一步回头看你。",
+                opts: [
+                    { t: "仔细观察两者动作的差异", d: "C" },
+                    { t: "感到一阵寒意和奇异的情绪", d: "E" },
+                    { t: "试着把手伸进镜子里", d: "X" },
+                    { t: "觉得镜子里的人是另一个层面的自己", d: "S" }]
             },
+
             {
-                q: "梦里你飞了起来：", opts: [
-                    { t: "控制飞行方向", d: "C" }, { t: "享受飞翔的感觉", d: "E" },
-                    { t: "飞向未知的地方", d: "X" }, { t: "觉得飞行代表什么", d: "S" }]
+                scene: "第十一幕 · 飞翔",
+                q: "你发现自己正在空中飞行，地面在几百米以下，城市的灯光像撒落的星星。你完全没有恐惧，只有轻盈。",
+                opts: [
+                    { t: "选定方向，有目的地飞行", d: "C" },
+                    { t: "闭上眼睛，感受风", d: "E" },
+                    { t: "飞向地平线另一侧的未知区域", d: "X" },
+                    { t: "想到飞翔在很多文化里意味着自由或灵魂", d: "S" }]
             },
+
             {
-                q: "梦里出现一条河：", opts: [
-                    { t: "找一座桥", d: "C" }, { t: "感受河流氛围", d: "E" },
-                    { t: "想渡河", d: "X" }, { t: "河流像人生的隐喻", d: "S" }]
+                scene: "第十二幕 · 河流",
+                q: "你站在一条宽阔的河边。河水清澈，能看见底部，但对岸模糊，像被雾遮住。渡口没有船，只有一根绳。",
+                opts: [
+                    { t: "沿岸走，寻找桥或渡口", d: "C" },
+                    { t: "坐下来，听河水流动的声音", d: "E" },
+                    { t: "抓住绳子，直接渡河", d: "X" },
+                    { t: "觉得这条河像是隔开两个时期的界限", d: "S" }]
             },
+
             {
-                q: "梦里有一座高塔：", opts: [
-                    { t: "想爬上去", d: "C" }, { t: "感觉孤独", d: "E" },
-                    { t: "探索内部", d: "X" }, { t: "塔像某种象征", d: "S" }]
+                scene: "第十三幕 · 塔",
+                q: "平原中央有一座极高的塔，没有门，只有外壁上的铁制凸起可以攀爬。塔顶有光，周围什么都没有。",
+                opts: [
+                    { t: "寻找更安全的登顶路线", d: "C" },
+                    { t: "感受塔的孤独感，站在远处看它", d: "E" },
+                    { t: "开始爬，想看看顶部有什么", d: "X" },
+                    { t: "觉得这座塔是某种独立与超脱的象征", d: "S" }]
             },
+
             {
-                q: "梦里你置身迷宫：", opts: [
-                    { t: "找出口", d: "C" }, { t: "感觉紧张", d: "E" },
-                    { t: "想看看所有的路", d: "X" }, { t: "觉得迷宫有特别的意义", d: "S" }]
+                scene: "第十四幕 · 迷宫",
+                q: "你在一个迷宫里，墙壁是光滑的黑色石头，高得看不见顶。走过几个路口，发现每条路都像走过。",
+                opts: [
+                    { t: "用手贴着右壁系统性地寻找出口", d: "C" },
+                    { t: "感受迷宫压迫感带来的情绪", d: "E" },
+                    { t: "不管出口，想把每条路都走一遍", d: "X" },
+                    { t: "觉得这个迷宫在反映某种内心困境", d: "S" }]
             },
+
             {
-                q: "梦里出现一本书：", opts: [
-                    { t: "打开阅读", d: "C" }, { t: "好奇内容", d: "E" },
-                    { t: "想找到更多书", d: "X" }, { t: "觉得书象征知识与记忆", d: "S" }]
+                scene: "第十五幕 · 书",
+                q: "一张书桌上放着一本厚书，封面空白，没有标题。翻开第一页，上面用你熟悉的字迹写着一句话，但你看不清内容。",
+                opts: [
+                    { t: "凑近，努力辨认字迹写的是什么", d: "C" },
+                    { t: "触摸纸张，感受这本书的气息", d: "E" },
+                    { t: "直接翻到最后一页", d: "X" },
+                    { t: "觉得这本书记录的是某段你遗忘的记忆", d: "S" }]
             },
+
             {
-                q: "梦里灯突然全部熄灭：", opts: [
-                    { t: "找光源", d: "C" }, { t: "感到不安", d: "E" },
-                    { t: "想看看黑暗里有什么", d: "X" }, { t: "黑暗让你联想到潜意识", d: "S" }]
+                scene: "第十六幕 · 黑暗",
+                q: "所有灯同时熄灭，黑暗瞬间覆盖一切。你的手放在面前也看不见。耳朵里只有自己的心跳声。",
+                opts: [
+                    { t: "沉着地摸索墙壁，寻找开关或出口", d: "C" },
+                    { t: "让黑暗停留片刻，感受这种彻底安静", d: "E" },
+                    { t: "往黑暗最深处走，看看有什么", d: "X" },
+                    { t: "感觉这种黑暗和潜意识的底层很像", d: "S" }]
             },
+
             {
-                q: "梦中你站在屋顶上：", opts: [
-                    { t: "找安全出口", d: "C" }, { t: "感受风", d: "E" },
-                    { t: "想跳到别的屋顶", d: "X" }, { t: "觉得高度象征自由", d: "S" }]
+                scene: "第十七幕 · 屋顶",
+                q: "你站在一栋高楼的顶层。风很大，城市铺开在脚下，远处的山和云层几乎在同一高度。没有护栏。",
+                opts: [
+                    { t: "退回来，找安全的地方站好", d: "C" },
+                    { t: "闭眼让风吹，什么都不想", d: "E" },
+                    { t: "走到边缘，想看看能不能跳到隔壁楼", d: "X" },
+                    { t: "想到站在高处是某种俯瞰与超越的感觉", d: "S" }]
             },
+
             {
-                q: "梦里看到一座巨大的城市：", opts: [
-                    { t: "想理解城市的布局", d: "C" }, { t: "感觉震撼", d: "E" },
-                    { t: "想深入探索", d: "X" }, { t: "城市像文明的象征", d: "S" }]
+                scene: "第十八幕 · 巨城",
+                q: "一座无边无际的城市突然出现在你眼前，它大得像一片大陆。建筑从眼前延伸到地平线，还在继续。",
+                opts: [
+                    { t: "分析城市的分区和路网结构", d: "C" },
+                    { t: "被它的规模震撼，感受这种渺小感", d: "E" },
+                    { t: "挑一个最陌生的区域走进去", d: "X" },
+                    { t: "觉得这座城市是人类集体意识的外化", d: "S" }]
             },
+
             {
-                q: "梦里有一条未知的小路：", opts: [
-                    { t: "判断是否安全", d: "C" }, { t: "感觉神秘", d: "E" },
-                    { t: "走进去", d: "X" }, { t: "小路像命运的象征", d: "S" }]
+                scene: "第十九幕 · 小路",
+                q: "雨后，你发现一条原本不存在的小路，出现在两棵树之间。路面还是湿的，两侧长满了开花的植物。",
+                opts: [
+                    { t: "先确认路的方向，判断安全性", d: "C" },
+                    { t: "站在入口感受它带来的奇妙感觉", d: "E" },
+                    { t: "不多想，直接走进去", d: "X" },
+                    { t: "觉得它的突然出现有某种含义", d: "S" }]
             },
+
             {
-                q: "梦里一扇窗通向宇宙：", opts: [
-                    { t: "研究它", d: "C" }, { t: "感到震撼", d: "E" },
-                    { t: "想进入宇宙", d: "X" }, { t: "觉得宇宙象征未知", d: "S" }]
+                scene: "第二十幕 · 宇宙之窗",
+                q: "房间里有一扇窗，窗外不是街道，而是星系。你能看见星云和行星缓缓移动，宇宙的尺度让时间感消失了。",
+                opts: [
+                    { t: "研究窗框的材质和工作原理", d: "C" },
+                    { t: "被宇宙的壮阔震撼得无法言语", d: "E" },
+                    { t: "尝试把手伸出去，或者翻越出去", d: "X" },
+                    { t: "感到宇宙在提示人类渺小与意义的问题", d: "S" }]
             },
+
             {
-                q: "梦里遇见未来的自己：", opts: [
-                    { t: "询问建议", d: "C" }, { t: "观察对方的情绪", d: "E" },
-                    { t: "想知道未来会发生什么", d: "X" }, { t: "觉得是心理象征", d: "S" }]
+                scene: "第二十一幕 · 未来的自己",
+                q: "对面站着另一个你，但更老一些。他/她沉默地看着你，眼神复杂，像想说什么，又像已经说完了。",
+                opts: [
+                    { t: "直接问对方：未来我过得怎么样", d: "C" },
+                    { t: "专注观察对方的神情，试图读懂情绪", d: "E" },
+                    { t: "问他/她走过了哪些路、去过哪些地方", d: "X" },
+                    { t: "觉得这次相遇本身是某种心理提示", d: "S" }]
             },
+
             {
-                q: "梦里城市开始漂浮：", opts: [
-                    { t: "找稳定的地方", d: "C" }, { t: "感觉梦幻", d: "E" },
-                    { t: "想跳到另一座城市", d: "X" }, { t: "城市漂浮有象征意义", d: "S" }]
+                scene: "第二十二幕 · 漂浮的城市",
+                q: "你脚下的城市整体开始缓缓升空，建筑物没有崩塌，只是连同土地一起漂起来，云层从旁边穿过。",
+                opts: [
+                    { t: "立刻找最稳固的建筑躲进去", d: "C" },
+                    { t: "感受这种不真实的梦幻感", d: "E" },
+                    { t: "跑到边缘，想跳到别处", d: "X" },
+                    { t: "觉得城市漂浮代表某种脱离与解放", d: "S" }]
             },
+
             {
-                q: "梦里时间倒流：", opts: [
-                    { t: "想控制它", d: "C" }, { t: "情绪变得复杂", d: "E" },
-                    { t: "想看看过去", d: "X" }, { t: "时间循环像某种隐喻", d: "S" }]
+                scene: "第二十三幕 · 时间倒流",
+                q: "你身边的一切开始倒退——落叶飞回树上，破碎的杯子重新合拢，一段对话被倒带。只有你的意识没有倒流。",
+                opts: [
+                    { t: "尝试干预倒流，看能否改变什么", d: "C" },
+                    { t: "看着熟悉的场景逆行，情绪涌上来", d: "E" },
+                    { t: "想回到更久之前，看看某段记忆", d: "X" },
+                    { t: "觉得时间倒流在表达某种关于遗憾的隐喻", d: "S" }]
             },
+
             {
-                q: "梦里世界变成迷雾：", opts: [
-                    { t: "找方向", d: "C" }, { t: "感到神秘", d: "E" },
-                    { t: "走进迷雾", d: "X" }, { t: "迷雾像潜意识", d: "S" }]
+                scene: "第二十四幕 · 迷雾世界",
+                q: "清晨，你发现世界被浓雾覆盖，能见度不到三米。声音也变得柔软，一切轮廓都消失在白色里。",
+                opts: [
+                    { t: "用方位感和逻辑判断前进方向", d: "C" },
+                    { t: "站着不动，感受雾里的静谧", d: "E" },
+                    { t: "直接走进最浓的雾中", d: "X" },
+                    { t: "感觉迷雾是潜意识的物质化形态", d: "S" }]
             },
+
             {
-                q: "梦醒前你看到一扇门：", opts: [
-                    { t: "推开它", d: "C" }, { t: "犹豫", d: "E" },
-                    { t: "好奇地靠近", d: "X" }, { t: "觉得门代表着什么", d: "S" }]
+                scene: "第二十五幕 · 最后一扇门",
+                q: "梦快要结束的时候，你看到一扇门。门的另一边有光，有隐约的声音，还有一种你熟悉却叫不出名字的气味。",
+                opts: [
+                    { t: "深呼一口气，推开门走进去", d: "C" },
+                    { t: "站在门口，感受那种熟悉感从哪里来", d: "E" },
+                    { t: "好奇心驱使你走过去，打开门", d: "X" },
+                    { t: "觉得这扇门通向的是某段尚未解开的事", d: "S" }]
             }
         ];
 
+        // ─────────────────────────────────────────
+        //  CONSTANTS
+        // ─────────────────────────────────────────
         const dimColors = { C: '#4a9eff', E: '#ff6b8a', X: '#4ade80', S: '#c084fc' };
         const dimLabels = { C: '梦境掌控度', E: '情绪感知度', X: '探索驱动力', S: '象征敏感度' };
         const letters = ['A', 'B', 'C', 'D'];
@@ -856,13 +986,125 @@
         ];
         const fallbackTitles = ['梦境漫游者', '潜意识航海家', '迷雾观察者', '意识探险家', '夜航者'];
 
-        const colorNames = {
-            C: ['深海蓝人格', '星空蓝人格', '冷夜蓝人格'],
-            E: ['暮色红人格', '玫瑰烟红人格', '深绯人格'],
-            X: ['极光绿人格', '迷雾翠人格', '远山绿人格'],
-            S: ['迷雾紫人格', '星焰紫人格', '幻境紫人格'],
+        // ─────────────────────────────────────────
+        //  DREAM COLOR SYSTEM
+        //  Box-Muller normal distribution, mapped to RGBA
+        // ─────────────────────────────────────────
+        function gaussianRand(mean, std) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return mean + std * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+        }
+
+        // Each dim has a "base hue zone" in HSL space
+        // C→220°(blue), E→350°(rose), X→140°(green), S→275°(violet)
+        const dimHue = { C: 220, E: 350, X: 140, S: 275 };
+        const dimSat = { C: 85, E: 80, X: 75, S: 80 };
+        const dimLight = { C: 55, E: 58, X: 50, S: 55 };
+
+        function scoresToDreamColor(fs) {
+            // Weighted hue mixing with gaussian noise
+            const total = fs.C + fs.E + fs.X + fs.S || 1;
+            const wC = fs.C / total, wE = fs.E / total, wX = fs.X / total, wS = fs.S / total;
+
+            // Circular hue average
+            let sinSum = wC * Math.sin(dimHue.C * Math.PI / 180)
+                + wE * Math.sin(dimHue.E * Math.PI / 180)
+                + wX * Math.sin(dimHue.X * Math.PI / 180)
+                + wS * Math.sin(dimHue.S * Math.PI / 180);
+            let cosSum = wC * Math.cos(dimHue.C * Math.PI / 180)
+                + wE * Math.cos(dimHue.E * Math.PI / 180)
+                + wX * Math.cos(dimHue.X * Math.PI / 180)
+                + wS * Math.cos(dimHue.S * Math.PI / 180);
+            let hue = (Math.atan2(sinSum, cosSum) * 180 / Math.PI + 360) % 360;
+
+            // Weighted saturation & lightness
+            const sat = wC * dimSat.C + wE * dimSat.E + wX * dimSat.X + wS * dimSat.S;
+            const light = wC * dimLight.C + wE * dimLight.E + wX * dimLight.X + wS * dimLight.S;
+
+            // Add gaussian noise (std=8 for hue, std=4 for sat/light)
+            hue = (hue + gaussianRand(0, 8) + 360) % 360;
+            const finalSat = Math.min(100, Math.max(40, sat + gaussianRand(0, 4)));
+            const finalLight = Math.min(75, Math.max(35, light + gaussianRand(0, 4)));
+
+            // Alpha: driven by max dim dominance (more dominant = more opaque)
+            const maxW = Math.max(wC, wE, wX, wS);
+            const alpha = Math.min(0.95, Math.max(0.65, 0.55 + maxW * 0.85 + gaussianRand(0, 0.03)));
+
+            return { hue, sat: finalSat, light: finalLight, alpha };
+        }
+
+        function hslToRgb(h, s, l) {
+            s /= 100; l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+        }
+
+        // Color name generator based on hue + dominant dim
+        function buildColorName(hue, top1) {
+            const hueNames = [
+                [0, 30, ['深绯', '暗红', '血玫']],
+                [30, 60, ['琥珀', '暮橙', '焦糖']],
+                [60, 100, ['苔藓', '深橄', '暗金']],
+                [100, 165, ['深翠', '远山绿', '暗松']],
+                [165, 210, ['深青', '暗水', '冷碧']],
+                [210, 250, ['深蓝', '星空蓝', '冷夜蓝']],
+                [250, 290, ['深紫', '幻境紫', '星焰紫']],
+                [290, 330, ['紫红', '迷雾玫', '暗兰']],
+                [330, 360, ['深玫', '暗绯', '星夜红']],
+            ];
+            let nameGroup = hueNames[0][2];
+            for (const [lo, hi, names] of hueNames) {
+                if (hue >= lo && hue < hi) { nameGroup = names; break; }
+            }
+            const suffix = ['梦境', '潜意识', '夜色', '星际', '深渊'][Math.floor(Math.random() * 5)];
+            return `${nameGroup[Math.floor(Math.random() * nameGroup.length)]} · ${suffix}`;
+        }
+
+        // ─────────────────────────────────────────
+        //  PERSONALIZED CLOSING
+        // ─────────────────────────────────────────
+        const closingTemplates = {
+            // top1, top2 → closing
+            'C_X': "你的梦境里有一种少见的东西：方向感与行动力并存。你不只是想象，你还会动身去验证。这种特质在现实里往往表现为：你不会让一个想法永远停留在想法阶段。",
+            'C_E': "你的梦境显示出你对秩序与情感都有敏锐的感知。你不是那种会忽视内心感受的人，但你也不会让情绪扰乱判断。这两种力量在你内部保持着一种微妙的平衡。",
+            'C_S': "你的梦境结构清晰，但骨子里藏着隐喻与象征的思维方式。你可能表面上看起来理性，但私下里会对某些符号、某段故事、某个细节反复琢磨，久久不忘。",
+            'E_X': "你的梦境里充满了流动感：情绪驱动你前行，好奇心给你方向。你不太会在一个地方停太久，因为你知道感受本身需要新的场景来呼吸。",
+            'E_S': "你的梦境是敏感的。你对气氛、情绪和隐藏的意义几乎有一种本能的感知。这让你在日常中常常能捕捉到别人忽略的细节，也偶尔会让你比别人更容易被某些事触动。",
+            'E_C': "你的梦境显示你是一个既能感受、也能思考的人。你不会把情绪当作干扰，而是把它当作信息。你做决定时，直觉和逻辑往往会在你内部完成一次悄悄的协商。",
+            'X_S': "你的梦境里有一种向往未知的冲动，但这种冲动不是盲目的——你是在寻找某些东西背后的意义。你探索，是因为你相信那里藏着值得被发现的东西。",
+            'X_E': "你的梦境里有一种活跃的生命力：你愿意走进未知，也愿意感受它带来的情绪起伏。你不害怕不确定，因为你知道那恰恰是有趣的事情开始的地方。",
+            'X_C': "你的梦境显示你是一个行动力很强的人。你不需要万事俱备才出发，但你也不是完全无序的——你会在行动中调整方向。这是一种很高效的存在方式。",
+            'S_X': "你的梦境里充满了象征与探索的交织。你不只是想理解眼前的事，你还想理解它代表什么。这让你的内心世界非常丰富，有时候丰富到旁人很难完全读懂你。",
+            'S_E': "你的梦境极其敏感——对感受和象征都是如此。你的内心可能是很多人里最安静但也最深邃的那种。那些别人一眼掠过的东西，你会在心里放很久。",
+            'S_C': "你的梦境显示你是个喜欢找意义的人，但不是那种漫无目的的寻找——你有自己的方法论。你可能不常把这些想法说出口，但你一直在内部完成一次又一次的深度整理。",
         };
 
+        function buildPersonalizedClosing(top1, top2, fs) {
+            const key1 = `${top1}_${top2}`;
+            const key2 = `${top2}_${top1}`;
+            const base = closingTemplates[key1] || closingTemplates[key2] ||
+                "梦境并不是预言，但它偶尔会像一面镜子，让我们看见一些平时不太注意到的自己。也许正因为这样，每个人的梦境，才会如此不同。";
+
+            // Add a score-driven coda
+            const maxScore = fs[top1];
+            let coda = "";
+            if (maxScore >= 72) {
+                coda = `\n\n值得注意的是，你的「${dimLabels[top1]}」得分显著偏高。这意味着在大多数情境下，这一特质会成为你最本能的反应方式——几乎不需要思考，它已经在了。`;
+            } else if (maxScore >= 52) {
+                coda = `\n\n你的「${dimLabels[top1]}」与「${dimLabels[top2]}」得分较为接近，说明这两种特质在你身上并非主次分明，而是在不同情境下交替主导。这种灵活性本身就是一种能力。`;
+            } else {
+                coda = `\n\n你的四个维度分布相对均衡，没有特别极端的倾向。这意味着你的潜意识结构比较多元，不容易被单一模式定义——这是一种比较罕见的状态。`;
+            }
+            return base + coda;
+        }
+
+        // ─────────────────────────────────────────
+        //  STATIC TEXT POOLS
+        // ─────────────────────────────────────────
         const openings = [
             "在无数个夜晚里，大脑会做一件非常奇妙的事。\n\n当现实世界安静下来，潜意识开始构建属于你的梦境。那里没有规则，却充满线索。",
             "有些人做梦像是在旅行，有些人做梦像是在观察一场戏，还有些人，则像是在阅读一段隐藏的故事。\n\n梦境从来不是随机的，它只是换了一种语言，讲述你的内心。",
@@ -878,12 +1120,10 @@
             "你的梦境更像一场夜晚的旅行。不是为了到达某个地方，而是为了看见一些平时不会注意到的东西。这种感觉会让你在现实中也偶尔产生一种奇妙的体验：好像某些瞬间，世界比表面看起来更深一点。",
             "你的梦境有一种柔软的深度。它不会突然爆发，而是慢慢地展开。像一层层雾气，或者像湖面上逐渐扩散的波纹。有些画面也许会很快消失，但那种感觉会留很久。"
         ];
-        const closings = [
-            "梦境并不是预言。但它偶尔会像一面镜子，让我们看见一些平时不太注意到的自己。也许正因为这样，每个人的梦境，才会如此不同。",
-            "也许某个夜晚，当你再次进入梦境时，你会突然意识到：原来那些看似随意的场景，其实一直在悄悄记录你的世界。",
-            "有时候，梦境并不想告诉我们答案。它只是轻轻提醒：世界远比我们想象的要丰富。而你，正好拥有看到其中一部分的能力。"
-        ];
 
+        // ─────────────────────────────────────────
+        //  STATE & CORE LOGIC
+        // ─────────────────────────────────────────
         let current = 0, scores = { C: 0, E: 0, X: 0, S: 0 };
         const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
         const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -905,6 +1145,7 @@
             document.getElementById('progress-fill').style.width = `${(current / questions.length) * 100}%`;
             const card = document.getElementById('question-card');
             card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'fadeUp 0.35s ease both';
+            document.querySelector('.question-scene').textContent = q.scene || '梦境场景';
             document.getElementById('question-text').textContent = q.q;
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
@@ -926,34 +1167,40 @@
         }
 
         function showResult() {
+            // Apply gaussian perturbation (std=3)
             const fs = {};
-            for (const d of ['C', 'E', 'X', 'S']) fs[d] = clamp(scores[d] + Math.floor(Math.random() * 7) - 3, 0, 100);
+            for (const d of ['C', 'E', 'X', 'S'])
+                fs[d] = clamp(scores[d] + Math.round(gaussianRand(0, 3)), 0, 100);
 
             const sorted = Object.entries(fs).sort((a, b) => b[1] - a[1]);
             const top1 = sorted[0][0], top2 = sorted[1][0];
 
+            // Title
             let title = null;
             for (const t of titlePool) {
                 if ((t.dims[0] === top1 && t.dims[1] === top2) || (t.dims[0] === top2 && t.dims[1] === top1)) { title = t.name; break; }
             }
             if (!title) title = rnd(fallbackTitles);
 
-            const r = Math.round((fs.E / 100) * 210 + (fs.C / 100) * 35);
-            const g = Math.round((fs.X / 100) * 200 + (fs.C / 100) * 50);
-            const b = Math.round((fs.C / 100) * 250 + (fs.S / 100) * 90);
-            const orbColor = `rgba(${r},${g},${b},0.9)`;
-            const glow = `rgba(${r},${g},${b},0.45)`;
+            // Dream color (new system)
+            const dc = scoresToDreamColor(fs);
+            const [rr, gg, bb] = hslToRgb(dc.hue, dc.sat, dc.light);
+            const orbColor = `rgba(${rr},${gg},${bb},${dc.alpha.toFixed(2)})`;
+            const orbColorDim = `rgba(${rr},${gg},${bb},${(dc.alpha * 0.4).toFixed(2)})`;
+            const glow = `rgba(${rr},${gg},${bb},0.45)`;
+            const colorLabel = buildColorName(dc.hue, top1);
 
+            // Set UI
             document.getElementById('result-title').textContent = `「${title}」`;
             document.getElementById('result-subtitle').textContent = `${dimLabels[top1]} · ${dimLabels[top2]}`;
 
             const orb = document.getElementById('result-orb');
-            orb.style.background = `radial-gradient(circle at 33% 33%, rgba(255,255,255,0.28) 0%, transparent 55%), radial-gradient(circle at 65% 70%, ${orbColor}, rgba(${r},${g},${b},0.25) 100%)`;
-            orb.style.boxShadow = `0 0 70px 24px ${glow}, inset 0 0 40px rgba(255,255,255,0.04)`;
+            orb.style.background = `radial-gradient(circle at 33% 33%, rgba(255,255,255,0.26) 0%, transparent 52%), radial-gradient(circle at 68% 72%, ${orbColor}, ${orbColorDim} 100%)`;
+            orb.style.boxShadow = `0 0 80px 28px ${glow}, inset 0 0 40px rgba(255,255,255,0.04)`;
 
             const dot = document.getElementById('color-dot');
-            dot.style.background = orbColor; dot.style.boxShadow = `0 0 8px ${orbColor}`;
-            document.getElementById('color-name').textContent = rnd(colorNames[top1]);
+            dot.style.background = orbColor; dot.style.boxShadow = `0 0 10px ${orbColor}`;
+            document.getElementById('color-name').textContent = colorLabel;
 
             // Dim bars
             const dimsDiv = document.getElementById('dims-section');
@@ -964,12 +1211,12 @@
                 dimsDiv.appendChild(row);
             }
 
-            // Report
+            // Report (personalized)
             const rep = document.getElementById('report-section');
             const o = rnd(openings).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
             const c = rnd(coreDescs).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
             const a = rnd(atmospheres);
-            const cl = rnd(closings);
+            const cl = buildPersonalizedClosing(top1, top2, fs).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
             rep.innerHTML = `
     <div class="report-opening">${o}</div>
     <div class="divider"><span>✦</span></div>
@@ -980,21 +1227,21 @@
     <div class="report-paragraph report-italic">${cl}</div>`;
 
             show('screen-result');
-
             setTimeout(() => {
                 document.querySelectorAll('.dim-bar-fill').forEach(el => el.style.width = el.dataset.s + '%');
                 drawRadar(fs);
             }, 320);
         }
 
+        // ─────────────────────────────────────────
+        //  RADAR
+        // ─────────────────────────────────────────
         function drawRadar(sc) {
             const canvas = document.getElementById('radar');
             const ctx = canvas.getContext('2d');
             const W = canvas.width, H = canvas.height, cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.36;
             const dims = ['C', 'E', 'X', 'S'], labels = ['掌控', '情绪', '探索', '象征'], n = dims.length;
             ctx.clearRect(0, 0, W, H);
-
-            // grid rings
             for (let r = 0.25; r <= 1; r += 0.25) {
                 ctx.beginPath();
                 for (let i = 0; i < n; i++) {
@@ -1005,14 +1252,12 @@
                 ctx.closePath();
                 ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.lineWidth = 1; ctx.stroke();
             }
-            // spokes
             for (let i = 0; i < n; i++) {
                 const a = (i / n) * 2 * Math.PI - Math.PI / 2;
                 ctx.beginPath(); ctx.moveTo(cx, cy);
                 ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
                 ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; ctx.stroke();
             }
-            // polygon
             ctx.beginPath();
             for (let i = 0; i < n; i++) {
                 const a = (i / n) * 2 * Math.PI - Math.PI / 2;
@@ -1025,7 +1270,6 @@
             g.addColorStop(0, 'rgba(192,132,252,0.32)'); g.addColorStop(1, 'rgba(74,158,255,0.12)');
             ctx.fillStyle = g; ctx.fill();
             ctx.strokeStyle = 'rgba(192,132,252,0.65)'; ctx.lineWidth = 1.5; ctx.stroke();
-            // dots
             const dotC = [dimColors.C, dimColors.E, dimColors.X, dimColors.S];
             for (let i = 0; i < n; i++) {
                 const a = (i / n) * 2 * Math.PI - Math.PI / 2;
@@ -1034,7 +1278,6 @@
                 ctx.beginPath(); ctx.arc(x, y, 4, 0, 2 * Math.PI);
                 ctx.fillStyle = dotC[i]; ctx.fill();
             }
-            // labels
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
             ctx.font = '13px "Noto Serif SC",serif';
             for (let i = 0; i < n; i++) {
