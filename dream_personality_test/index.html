@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>潜意识梦境人格测试</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=ZCOOL+XiaoWei&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a12;
+            --surface: #12121e;
+            --surface2: #1a1a2e;
+            --border: rgba(255, 255, 255, 0.07);
+            --text: #e8e4f0;
+            --text-dim: rgba(232, 228, 240, 0.55);
+            --text-dimmer: rgba(232, 228, 240, 0.25);
+            --accent-c: #4a9eff;
+            --accent-e: #ff6b8a;
+            --accent-x: #4ade80;
+            --accent-s: #c084fc;
+            --gold: #d4a96a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Serif SC', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 10% 15%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
+                radial-gradient(1px 1px at 25% 60%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 40% 30%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 55% 80%, rgba(255, 255, 255, 0.25) 0%, transparent 100%),
+                radial-gradient(1px 1px at 70% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 82% 55%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
+                radial-gradient(1px 1px at 92% 40%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+                radial-gradient(1px 1px at 15% 88%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 35% 10%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+                radial-gradient(1px 1px at 63% 48%, rgba(255, 255, 255, 0.2) 0%, transparent 100%),
+                radial-gradient(1px 1px at 78% 72%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
+                radial-gradient(1px 1px at 5% 50%, rgba(255, 255, 255, 0.25) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 47% 65%, rgba(200, 180, 255, 0.45) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 88% 12%, rgba(180, 220, 255, 0.4) 0%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 22% 42%, rgba(255, 200, 220, 0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 58% 25%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+                radial-gradient(1px 1px at 3% 75%, rgba(255, 255, 255, 0.2) 0%, transparent 100%),
+                radial-gradient(1px 1px at 95% 85%, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 65% 45% at 15% 25%, rgba(100, 50, 200, 0.09) 0%, transparent 70%),
+                radial-gradient(ellipse 55% 65% at 85% 75%, rgba(20, 70, 180, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 45% 55% at 50% 50%, rgba(70, 15, 110, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .screen {
+            display: none;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* ── INTRO ── */
+        #screen-intro {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .intro-eyebrow {
+            font-size: 10px;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.75;
+            margin-bottom: 28px;
+            animation: fadeUp 0.8s ease both;
+        }
+
+        .intro-title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: clamp(34px, 7.5vw, 68px);
+            font-weight: 400;
+            line-height: 1.2;
+            background: linear-gradient(140deg, #e8e4f0 0%, #c084fc 50%, #4a9eff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 22px;
+            animation: fadeUp 0.8s 0.1s ease both;
+        }
+
+        .intro-sub {
+            font-size: 15px;
+            color: var(--text-dim);
+            line-height: 1.9;
+            max-width: 420px;
+            margin: 0 auto 48px;
+            animation: fadeUp 0.8s 0.2s ease both;
+        }
+
+        .intro-copy {
+            max-width: 480px;
+            margin: 0 auto 52px;
+            animation: fadeUp 0.8s 0.3s ease both;
+        }
+
+        .intro-copy p {
+            font-size: 14px;
+            color: var(--text-dim);
+            line-height: 2.1;
+            margin-bottom: 14px;
+            font-style: italic;
+        }
+
+        .intro-tags {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+            animation: fadeUp 0.8s 0.35s ease both;
+        }
+
+        .tag {
+            padding: 6px 16px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 11px;
+            color: var(--text-dimmer);
+            letter-spacing: 2px;
+        }
+
+        .btn-start {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 52px;
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.12), rgba(74, 158, 255, 0.12));
+            border: 1px solid rgba(192, 132, 252, 0.32);
+            border-radius: 40px;
+            color: var(--text);
+            font-family: 'Noto Serif SC', serif;
+            font-size: 15px;
+            letter-spacing: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.8s 0.4s ease both;
+        }
+
+        .btn-start::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.18), rgba(74, 158, 255, 0.18));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-start:hover::before {
+            opacity: 1;
+        }
+
+        .btn-start:hover {
+            border-color: rgba(192, 132, 252, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .intro-note {
+            margin-top: 28px;
+            font-size: 11px;
+            color: var(--text-dimmer);
+            letter-spacing: 2px;
+            animation: fadeUp 0.8s 0.5s ease both;
+        }
+
+        /* ── QUIZ ── */
+        #screen-quiz {
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 24px 80px;
+        }
+
+        .quiz-header {
+            width: 100%;
+            max-width: 680px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+
+        .quiz-logo {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 14px;
+            color: var(--gold);
+            opacity: 0.65;
+            letter-spacing: 2px;
+        }
+
+        .quiz-counter {
+            font-size: 11px;
+            color: var(--text-dimmer);
+            letter-spacing: 3px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 680px;
+            height: 2px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-bottom: 52px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #c084fc, #4a9eff);
+            border-radius: 2px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        .question-card {
+            width: 100%;
+            max-width: 680px;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .question-scene {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.55;
+            margin-bottom: 16px;
+        }
+
+        .question-text {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: clamp(19px, 3.8vw, 28px);
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 40px;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 11px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.25s;
+            width: 100%;
+            color: var(--text);
+            font-family: 'Noto Serif SC', serif;
+            font-size: 14px;
+            line-height: 1.65;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .option-btn[data-dim="C"]::before {
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), transparent);
+        }
+
+        .option-btn[data-dim="E"]::before {
+            background: linear-gradient(135deg, rgba(255, 107, 138, 0.1), transparent);
+        }
+
+        .option-btn[data-dim="X"]::before {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), transparent);
+        }
+
+        .option-btn[data-dim="S"]::before {
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.1), transparent);
+        }
+
+        .option-btn:hover::before {
+            opacity: 1;
+        }
+
+        .option-btn:hover {
+            border-color: rgba(255, 255, 255, 0.14);
+            transform: translateX(4px);
+        }
+
+        .option-btn.selected {
+            border-color: rgba(192, 132, 252, 0.5);
+        }
+
+        .option-btn.selected::before {
+            opacity: 1;
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--text-dimmer);
+            flex-shrink: 0;
+            transition: all 0.25s;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .option-btn[data-dim="C"] .option-letter {
+            border-color: rgba(74, 158, 255, 0.25);
+        }
+
+        .option-btn[data-dim="E"] .option-letter {
+            border-color: rgba(255, 107, 138, 0.25);
+        }
+
+        .option-btn[data-dim="X"] .option-letter {
+            border-color: rgba(74, 222, 128, 0.25);
+        }
+
+        .option-btn[data-dim="S"] .option-letter {
+            border-color: rgba(192, 132, 252, 0.25);
+        }
+
+        .option-btn:hover .option-letter,
+        .option-btn.selected .option-letter {
+            background: rgba(192, 132, 252, 0.12);
+            color: var(--text);
+        }
+
+        /* ── RESULT ── */
+        #screen-result {
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 24px 80px;
+        }
+
+        .result-eyebrow {
+            font-size: 10px;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.7;
+            margin-bottom: 36px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .orb-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 36px;
+            animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .orb {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            animation: orbFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes orbFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-10px) scale(1.025);
+            }
+        }
+
+        .color-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 20px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 28px;
+            letter-spacing: 3px;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .result-title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: clamp(26px, 5.5vw, 46px);
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #e8e4f0, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeUp 0.6s 0.25s ease both;
+        }
+
+        .result-subtitle {
+            font-size: 12px;
+            color: var(--text-dimmer);
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 52px;
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+
+        .result-body {
+            width: 100%;
+            max-width: 680px;
+        }
+
+        .radar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 48px;
+            animation: fadeUp 0.6s 0.35s ease both;
+        }
+
+        .section-label {
+            font-size: 9px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.55;
+            margin-bottom: 24px;
+        }
+
+        canvas#radar {
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .dims-section {
+            margin-bottom: 48px;
+            animation: fadeUp 0.6s 0.4s ease both;
+        }
+
+        .dim-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 15px;
+        }
+
+        .dim-label {
+            width: 80px;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .dim-bar-track {
+            flex: 1;
+            height: 5px;
+            background: var(--surface2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .dim-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            width: 0;
+            transition: width 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dim-score {
+            width: 36px;
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .report-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 36px;
+            animation: fadeUp 0.6s 0.45s ease both;
+        }
+
+        .report-opening {
+            font-size: 14px;
+            color: var(--text-dim);
+            line-height: 2.1;
+            font-style: italic;
+            margin-bottom: 0;
+        }
+
+        .report-paragraph {
+            font-size: 14px;
+            color: var(--text-dim);
+            line-height: 2.1;
+            margin-bottom: 0;
+        }
+
+        .report-italic {
+            font-style: italic;
+            opacity: 0.75;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+            opacity: 0.2;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--text);
+        }
+
+        .divider span {
+            font-size: 9px;
+            letter-spacing: 3px;
+        }
+
+        .btn-retry {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 36px;
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            background: transparent;
+            color: var(--text-dim);
+            font-family: 'Noto Serif SC', serif;
+            font-size: 12px;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.25s;
+            animation: fadeUp 0.6s 0.5s ease both;
+        }
+
+        .btn-retry:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width:480px) {
+            .report-section {
+                padding: 22px 16px;
+            }
+
+            .option-btn {
+                padding: 14px 14px;
+                font-size: 13px;
+                gap: 12px;
+            }
+
+            .option-letter {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- INTRO -->
+    <section id="screen-intro" class="screen active">
+        <div class="intro-eyebrow">Dream Narrative Personality Model</div>
+        <h1 class="intro-title">潜意识梦境<br>人格测试</h1>
+        <p class="intro-sub">你的梦境选择，正在暴露你的潜意识结构。</p>
+
+        <div class="intro-copy">
+            <p>在无数个夜晚里，大脑会做一件非常奇妙的事。<br>当现实世界安静下来，潜意识开始构建属于你的梦境。</p>
+            <p>那里没有规则，却充满线索。<br>而你在梦境中的每一次选择，<br>都在悄悄透露你感知世界的方式。</p>
+        </div>
+
+        <div class="intro-tags">
+            <span class="tag">25 个梦境场景</span>
+            <span class="tag">4 个潜意识维度</span>
+            <span class="tag">约 5 分钟</span>
+        </div>
+
+        <button class="btn-start" onclick="startQuiz()">
+            <span>进入梦境</span>
+            <span style="opacity:0.4">→</span>
+        </button>
+        <p class="intro-note">请跟随直觉作答，无需过多思考</p>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="screen-quiz" class="screen">
+        <div class="quiz-header">
+            <div class="quiz-logo">梦境测试</div>
+            <div class="quiz-counter" id="counter">1 / 25</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="question-card" id="question-card">
+            <div class="question-scene">梦境场景</div>
+            <div class="question-text" id="question-text"></div>
+            <div class="options-grid" id="options-grid"></div>
+        </div>
+    </section>
+
+    <!-- RESULT -->
+    <section id="screen-result" class="screen">
+        <div class="result-eyebrow">你的梦境人格</div>
+
+        <div class="orb-container">
+            <div class="orb" id="result-orb"></div>
+        </div>
+
+        <div class="color-badge">
+            <div class="color-dot" id="color-dot"></div>
+            <span id="color-name"></span>
+        </div>
+
+        <h2 class="result-title" id="result-title"></h2>
+        <p class="result-subtitle" id="result-subtitle"></p>
+
+        <div class="result-body">
+            <div class="radar-section">
+                <div class="section-label">四维度分析</div>
+                <canvas id="radar" width="300" height="300"></canvas>
+            </div>
+
+            <div class="dims-section" id="dims-section"></div>
+            <div class="report-section" id="report-section"></div>
+
+            <div style="text-align:center;">
+                <button class="btn-retry" onclick="resetQuiz()">↺ &nbsp;重新测试</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const questions = [
+            {
+                q: "梦里你走进一片陌生森林，你首先会：", opts: [
+                    { t: "找一条清晰的小路走", d: "C" }, { t: "停下来观察环境", d: "E" },
+                    { t: "直接往深处走", d: "X" }, { t: "注意森林里奇怪的细节", d: "S" }]
+            },
+            {
+                q: "梦中天空突然变成紫色，你的反应是：", opts: [
+                    { t: "试图寻找原因", d: "C" }, { t: "感到一种奇怪的情绪", d: "E" },
+                    { t: "想知道天空背后有什么", d: "X" }, { t: "觉得这可能象征什么", d: "S" }]
+            },
+            {
+                q: "你梦见一扇锁着的门：", opts: [
+                    { t: "想办法打开它", d: "C" }, { t: "感觉门后可能有故事", d: "E" },
+                    { t: "很想进去看看", d: "X" }, { t: "门的形状让你产生联想", d: "S" }]
+            },
+            {
+                q: "梦里你在一座城市迷路：", opts: [
+                    { t: "找地图", d: "C" }, { t: "感受城市的氛围", d: "E" },
+                    { t: "随便走走看看", d: "X" }, { t: "注意城市的奇怪结构", d: "S" }]
+            },
+            {
+                q: "梦里你遇见一个陌生人：", opts: [
+                    { t: "问他这里是哪里", d: "C" }, { t: "注意他的表情", d: "E" },
+                    { t: "想知道他来自哪里", d: "X" }, { t: "觉得他像某种象征", d: "S" }]
+            },
+            {
+                q: "梦里你在海边：", opts: [
+                    { t: "观察潮汐规律", d: "C" }, { t: "感受海风情绪", d: "E" },
+                    { t: "想游向远处", d: "X" }, { t: "海浪让你产生联想", d: "S" }]
+            },
+            {
+                q: "梦中出现一只白鹿：", opts: [
+                    { t: "尝试靠近它", d: "C" }, { t: "感到神秘", d: "E" },
+                    { t: "跟随它", d: "X" }, { t: "觉得它像某种寓意", d: "S" }]
+            },
+            {
+                q: "梦里时间突然停止：", opts: [
+                    { t: "想找出原因", d: "C" }, { t: "感到紧张", d: "E" },
+                    { t: "想利用时间探索周围", d: "X" }, { t: "觉得时间停止有象征意义", d: "S" }]
+            },
+            {
+                q: "梦里房间不断变化形状：", opts: [
+                    { t: "尝试理解它的结构", d: "C" }, { t: "感觉不安", d: "E" },
+                    { t: "想继续探索", d: "X" }, { t: "觉得像某种心理空间", d: "S" }]
+            },
+            {
+                q: "梦中你发现一面镜子：", opts: [
+                    { t: "看看镜中的自己", d: "C" }, { t: "感觉有点奇怪", d: "E" },
+                    { t: "想穿过镜子", d: "X" }, { t: "镜子让你想到潜意识", d: "S" }]
+            },
+            {
+                q: "梦里你飞了起来：", opts: [
+                    { t: "控制飞行方向", d: "C" }, { t: "享受飞翔的感觉", d: "E" },
+                    { t: "飞向未知的地方", d: "X" }, { t: "觉得飞行代表什么", d: "S" }]
+            },
+            {
+                q: "梦里出现一条河：", opts: [
+                    { t: "找一座桥", d: "C" }, { t: "感受河流氛围", d: "E" },
+                    { t: "想渡河", d: "X" }, { t: "河流像人生的隐喻", d: "S" }]
+            },
+            {
+                q: "梦里有一座高塔：", opts: [
+                    { t: "想爬上去", d: "C" }, { t: "感觉孤独", d: "E" },
+                    { t: "探索内部", d: "X" }, { t: "塔像某种象征", d: "S" }]
+            },
+            {
+                q: "梦里你置身迷宫：", opts: [
+                    { t: "找出口", d: "C" }, { t: "感觉紧张", d: "E" },
+                    { t: "想看看所有的路", d: "X" }, { t: "觉得迷宫有特别的意义", d: "S" }]
+            },
+            {
+                q: "梦里出现一本书：", opts: [
+                    { t: "打开阅读", d: "C" }, { t: "好奇内容", d: "E" },
+                    { t: "想找到更多书", d: "X" }, { t: "觉得书象征知识与记忆", d: "S" }]
+            },
+            {
+                q: "梦里灯突然全部熄灭：", opts: [
+                    { t: "找光源", d: "C" }, { t: "感到不安", d: "E" },
+                    { t: "想看看黑暗里有什么", d: "X" }, { t: "黑暗让你联想到潜意识", d: "S" }]
+            },
+            {
+                q: "梦中你站在屋顶上：", opts: [
+                    { t: "找安全出口", d: "C" }, { t: "感受风", d: "E" },
+                    { t: "想跳到别的屋顶", d: "X" }, { t: "觉得高度象征自由", d: "S" }]
+            },
+            {
+                q: "梦里看到一座巨大的城市：", opts: [
+                    { t: "想理解城市的布局", d: "C" }, { t: "感觉震撼", d: "E" },
+                    { t: "想深入探索", d: "X" }, { t: "城市像文明的象征", d: "S" }]
+            },
+            {
+                q: "梦里有一条未知的小路：", opts: [
+                    { t: "判断是否安全", d: "C" }, { t: "感觉神秘", d: "E" },
+                    { t: "走进去", d: "X" }, { t: "小路像命运的象征", d: "S" }]
+            },
+            {
+                q: "梦里一扇窗通向宇宙：", opts: [
+                    { t: "研究它", d: "C" }, { t: "感到震撼", d: "E" },
+                    { t: "想进入宇宙", d: "X" }, { t: "觉得宇宙象征未知", d: "S" }]
+            },
+            {
+                q: "梦里遇见未来的自己：", opts: [
+                    { t: "询问建议", d: "C" }, { t: "观察对方的情绪", d: "E" },
+                    { t: "想知道未来会发生什么", d: "X" }, { t: "觉得是心理象征", d: "S" }]
+            },
+            {
+                q: "梦里城市开始漂浮：", opts: [
+                    { t: "找稳定的地方", d: "C" }, { t: "感觉梦幻", d: "E" },
+                    { t: "想跳到另一座城市", d: "X" }, { t: "城市漂浮有象征意义", d: "S" }]
+            },
+            {
+                q: "梦里时间倒流：", opts: [
+                    { t: "想控制它", d: "C" }, { t: "情绪变得复杂", d: "E" },
+                    { t: "想看看过去", d: "X" }, { t: "时间循环像某种隐喻", d: "S" }]
+            },
+            {
+                q: "梦里世界变成迷雾：", opts: [
+                    { t: "找方向", d: "C" }, { t: "感到神秘", d: "E" },
+                    { t: "走进迷雾", d: "X" }, { t: "迷雾像潜意识", d: "S" }]
+            },
+            {
+                q: "梦醒前你看到一扇门：", opts: [
+                    { t: "推开它", d: "C" }, { t: "犹豫", d: "E" },
+                    { t: "好奇地靠近", d: "X" }, { t: "觉得门代表着什么", d: "S" }]
+            }
+        ];
+
+        const dimColors = { C: '#4a9eff', E: '#ff6b8a', X: '#4ade80', S: '#c084fc' };
+        const dimLabels = { C: '梦境掌控度', E: '情绪感知度', X: '探索驱动力', S: '象征敏感度' };
+        const letters = ['A', 'B', 'C', 'D'];
+
+        const titlePool = [
+            { dims: ['X', 'S'], name: '梦境探索者' }, { dims: ['C', 'S'], name: '潜意识建筑师' },
+            { dims: ['E', 'S'], name: '情绪预言者' }, { dims: ['X', 'E'], name: '感知旅行者' },
+            { dims: ['C', 'X'], name: '秩序开拓者' }, { dims: ['C', 'E'], name: '理性感知者' },
+            { dims: ['S', 'X'], name: '象征追寻者' }, { dims: ['E', 'C'], name: '情绪掌舵者' },
+            { dims: ['S', 'C'], name: '符号解析者' }, { dims: ['E', 'X'], name: '星夜旅人' },
+        ];
+        const fallbackTitles = ['梦境漫游者', '潜意识航海家', '迷雾观察者', '意识探险家', '夜航者'];
+
+        const colorNames = {
+            C: ['深海蓝人格', '星空蓝人格', '冷夜蓝人格'],
+            E: ['暮色红人格', '玫瑰烟红人格', '深绯人格'],
+            X: ['极光绿人格', '迷雾翠人格', '远山绿人格'],
+            S: ['迷雾紫人格', '星焰紫人格', '幻境紫人格'],
+        };
+
+        const openings = [
+            "在无数个夜晚里，大脑会做一件非常奇妙的事。\n\n当现实世界安静下来，潜意识开始构建属于你的梦境。那里没有规则，却充满线索。",
+            "有些人做梦像是在旅行，有些人做梦像是在观察一场戏，还有些人，则像是在阅读一段隐藏的故事。\n\n梦境从来不是随机的，它只是换了一种语言，讲述你的内心。",
+            "如果把人的意识比作一座城市，那么梦境就是城市最深处的灯光。\n\n那里不会说话，但它会用场景、颜色和情绪告诉你——你是谁。"
+        ];
+        const coreDescs = [
+            "你的梦境像一条缓慢流动的河。\n\n很多人会匆匆经过世界，而你更像是停下来观察水面的人。你会注意那些别人不太在意的细节：一段气氛、一种变化、一点微妙的感觉。有时你甚至会突然意识到——原来世界还有另一种解释方式。",
+            "你的梦境并不急着给出答案。\n\n它更像是一条不断延伸的道路。有些地方清晰，有些地方隐藏在雾里。而你似乎并不害怕这种未知，因为你知道很多有趣的事情，往往就藏在那些没有完全看清的地方。",
+            "在梦境里，你更像一个观察世界的人。\n\n当别人只是走过一条路时，你会感受到：空气的变化，情绪的波动，场景背后的意味。很多时候，你并不是刻意在思考这些东西，它们只是自然地出现在你的感知里。"
+        ];
+        const atmospheres = [
+            "你的梦境气质带着一点安静的神秘感。不是那种喧闹的奇幻，而是一种慢慢展开的画面。有时候是一片森林，有时候是一条没有尽头的小路，有时候只是某种无法解释的情绪。这些片段组合在一起，就像是一种属于你的语言。",
+            "你的梦境更像一场夜晚的旅行。不是为了到达某个地方，而是为了看见一些平时不会注意到的东西。这种感觉会让你在现实中也偶尔产生一种奇妙的体验：好像某些瞬间，世界比表面看起来更深一点。",
+            "你的梦境有一种柔软的深度。它不会突然爆发，而是慢慢地展开。像一层层雾气，或者像湖面上逐渐扩散的波纹。有些画面也许会很快消失，但那种感觉会留很久。"
+        ];
+        const closings = [
+            "梦境并不是预言。但它偶尔会像一面镜子，让我们看见一些平时不太注意到的自己。也许正因为这样，每个人的梦境，才会如此不同。",
+            "也许某个夜晚，当你再次进入梦境时，你会突然意识到：原来那些看似随意的场景，其实一直在悄悄记录你的世界。",
+            "有时候，梦境并不想告诉我们答案。它只是轻轻提醒：世界远比我们想象的要丰富。而你，正好拥有看到其中一部分的能力。"
+        ];
+
+        let current = 0, scores = { C: 0, E: 0, X: 0, S: 0 };
+        const rnd = arr => arr[Math.floor(Math.random() * arr.length)];
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+        function startQuiz() {
+            current = 0; scores = { C: 0, E: 0, X: 0, S: 0 };
+            show('screen-quiz'); renderQ();
+        }
+        function resetQuiz() { show('screen-intro'); }
+        function show(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function renderQ() {
+            const q = questions[current];
+            document.getElementById('counter').textContent = `${current + 1} / ${questions.length}`;
+            document.getElementById('progress-fill').style.width = `${(current / questions.length) * 100}%`;
+            const card = document.getElementById('question-card');
+            card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'fadeUp 0.35s ease both';
+            document.getElementById('question-text').textContent = q.q;
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            const shuffled = [...q.opts].sort(() => Math.random() - 0.5);
+            shuffled.forEach((o, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn'; btn.dataset.dim = o.d;
+                btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${o.t}</span>`;
+                btn.onclick = () => pick(o.d, btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function pick(dim, btn) {
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            scores[dim] += 4;
+            setTimeout(() => { current++; current < questions.length ? renderQ() : showResult(); }, 380);
+        }
+
+        function showResult() {
+            const fs = {};
+            for (const d of ['C', 'E', 'X', 'S']) fs[d] = clamp(scores[d] + Math.floor(Math.random() * 7) - 3, 0, 100);
+
+            const sorted = Object.entries(fs).sort((a, b) => b[1] - a[1]);
+            const top1 = sorted[0][0], top2 = sorted[1][0];
+
+            let title = null;
+            for (const t of titlePool) {
+                if ((t.dims[0] === top1 && t.dims[1] === top2) || (t.dims[0] === top2 && t.dims[1] === top1)) { title = t.name; break; }
+            }
+            if (!title) title = rnd(fallbackTitles);
+
+            const r = Math.round((fs.E / 100) * 210 + (fs.C / 100) * 35);
+            const g = Math.round((fs.X / 100) * 200 + (fs.C / 100) * 50);
+            const b = Math.round((fs.C / 100) * 250 + (fs.S / 100) * 90);
+            const orbColor = `rgba(${r},${g},${b},0.9)`;
+            const glow = `rgba(${r},${g},${b},0.45)`;
+
+            document.getElementById('result-title').textContent = `「${title}」`;
+            document.getElementById('result-subtitle').textContent = `${dimLabels[top1]} · ${dimLabels[top2]}`;
+
+            const orb = document.getElementById('result-orb');
+            orb.style.background = `radial-gradient(circle at 33% 33%, rgba(255,255,255,0.28) 0%, transparent 55%), radial-gradient(circle at 65% 70%, ${orbColor}, rgba(${r},${g},${b},0.25) 100%)`;
+            orb.style.boxShadow = `0 0 70px 24px ${glow}, inset 0 0 40px rgba(255,255,255,0.04)`;
+
+            const dot = document.getElementById('color-dot');
+            dot.style.background = orbColor; dot.style.boxShadow = `0 0 8px ${orbColor}`;
+            document.getElementById('color-name').textContent = rnd(colorNames[top1]);
+
+            // Dim bars
+            const dimsDiv = document.getElementById('dims-section');
+            dimsDiv.innerHTML = `<div class="section-label" style="text-align:center;margin-bottom:20px;">维度分析</div>`;
+            for (const [d, sc] of sorted) {
+                const row = document.createElement('div'); row.className = 'dim-row';
+                row.innerHTML = `<div class="dim-label">${dimLabels[d]}</div><div class="dim-bar-track"><div class="dim-bar-fill" style="background:${dimColors[d]}" data-s="${sc}"></div></div><div class="dim-score">${sc}</div>`;
+                dimsDiv.appendChild(row);
+            }
+
+            // Report
+            const rep = document.getElementById('report-section');
+            const o = rnd(openings).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+            const c = rnd(coreDescs).replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+            const a = rnd(atmospheres);
+            const cl = rnd(closings);
+            rep.innerHTML = `
+    <div class="report-opening">${o}</div>
+    <div class="divider"><span>✦</span></div>
+    <div class="report-paragraph">${c}</div>
+    <div class="divider"><span>✦</span></div>
+    <div class="report-paragraph">${a}</div>
+    <div class="divider"><span>✦</span></div>
+    <div class="report-paragraph report-italic">${cl}</div>`;
+
+            show('screen-result');
+
+            setTimeout(() => {
+                document.querySelectorAll('.dim-bar-fill').forEach(el => el.style.width = el.dataset.s + '%');
+                drawRadar(fs);
+            }, 320);
+        }
+
+        function drawRadar(sc) {
+            const canvas = document.getElementById('radar');
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width, H = canvas.height, cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.36;
+            const dims = ['C', 'E', 'X', 'S'], labels = ['掌控', '情绪', '探索', '象征'], n = dims.length;
+            ctx.clearRect(0, 0, W, H);
+
+            // grid rings
+            for (let r = 0.25; r <= 1; r += 0.25) {
+                ctx.beginPath();
+                for (let i = 0; i < n; i++) {
+                    const a = (i / n) * 2 * Math.PI - Math.PI / 2;
+                    const x = cx + Math.cos(a) * R * r, y = cy + Math.sin(a) * R * r;
+                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.lineWidth = 1; ctx.stroke();
+            }
+            // spokes
+            for (let i = 0; i < n; i++) {
+                const a = (i / n) * 2 * Math.PI - Math.PI / 2;
+                ctx.beginPath(); ctx.moveTo(cx, cy);
+                ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+                ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; ctx.stroke();
+            }
+            // polygon
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                const a = (i / n) * 2 * Math.PI - Math.PI / 2;
+                const v = sc[dims[i]] / 100;
+                const x = cx + Math.cos(a) * R * v, y = cy + Math.sin(a) * R * v;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+            g.addColorStop(0, 'rgba(192,132,252,0.32)'); g.addColorStop(1, 'rgba(74,158,255,0.12)');
+            ctx.fillStyle = g; ctx.fill();
+            ctx.strokeStyle = 'rgba(192,132,252,0.65)'; ctx.lineWidth = 1.5; ctx.stroke();
+            // dots
+            const dotC = [dimColors.C, dimColors.E, dimColors.X, dimColors.S];
+            for (let i = 0; i < n; i++) {
+                const a = (i / n) * 2 * Math.PI - Math.PI / 2;
+                const v = sc[dims[i]] / 100;
+                const x = cx + Math.cos(a) * R * v, y = cy + Math.sin(a) * R * v;
+                ctx.beginPath(); ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fillStyle = dotC[i]; ctx.fill();
+            }
+            // labels
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.font = '13px "Noto Serif SC",serif';
+            for (let i = 0; i < n; i++) {
+                const a = (i / n) * 2 * Math.PI - Math.PI / 2;
+                const lx = cx + Math.cos(a) * (R + 28), ly = cy + Math.sin(a) * (R + 28);
+                ctx.fillStyle = dotC[i]; ctx.fillText(labels[i], lx, ly);
+            }
+        }
+    </script>
+</body>
+
+</html>
